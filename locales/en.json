@@ -117,5 +117,6 @@
 	"Powered by %s": "Powered by %s",
 	"Register": "Register",
 	"Export with pandoc": "Export with pandoc",
-	"Select output format": "Select output format"
+	"Select output format": "Select output format",
+	"An online service provided to you by %s": "An online service provided to you by %s"
 }
