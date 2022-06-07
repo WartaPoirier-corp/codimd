@@ -299,7 +299,7 @@ const supportCodeModes = [
   'yaml',
   'zephir'
 ]
-const supportCharts = ['sequence', 'flow', 'graphviz', 'mermaid', 'abc']
+const supportCharts = ['sequence', 'flow', 'graphviz', 'mermaid', 'abc', 'plantuml']
 const supportHeaders = [
   {
     text: '# h1',

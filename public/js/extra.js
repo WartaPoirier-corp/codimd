@@ -17,6 +17,8 @@ import markdownitContainer from 'markdown-it-container'
 import Plugin from 'markdown-it-regexp'
 
 import 'gist-embed'
+import Viz from 'viz.js'
+import { getPlantUMLUrl } from './plantuml'
 
 require('prismjs/themes/prism.css')
 require('prismjs/components/prism-wiki')
@@ -426,6 +428,23 @@ export function finishView (view) {
       console.warn(err)
     }
   })
+  const plantumls = view.find('div.plantuml.raw').removeClass('raw')
+  plantumls.each((key, value) => {
+    let $value
+    try {
+      $value = $(value)
+      const $ele = $(value).parent().parent()
+      const $center = $('<center>')
+      $center.addClass('part plantuml')
+      const $img = $('<img>').attr('src', getPlantUMLUrl($value.text()))
+      $center.append($img)
+      $ele.replaceWith($center)
+    } catch (err) {
+      $value.unwrap()
+      $value.parent().append(`<div class="alert alert-warning">${escapeHTML(err)}</div>`)
+      console.warn(err)
+    }
+  })
   // image href new window(emoji not included)
   const images = view.find('img.raw[src]').removeClass('raw')
   images.each((key, value) => {
@@ -496,7 +515,7 @@ export function finishView (view) {
       const langDiv = $(value)
       if (langDiv.length > 0) {
         const reallang = langDiv[0].className.replace(/hljs|wrap/g, '').trim()
-        if (reallang === 'mermaid' || reallang === 'abc' || reallang === 'graphviz') {
+        if (reallang === 'mermaid' || reallang === 'abc' || reallang === 'graphviz' || reallang === 'plantuml') {
           return
         }
         const codeDiv = langDiv.find('.code')
@@ -999,6 +1018,8 @@ function highlightRender (code, lang) {
     return `<div class="mermaid raw">${code}</div>`
   } else if (lang === 'abc') {
     return `<div class="abc raw">${code}</div>`
+  } else if (lang === 'plantuml') {
+    return `<div class="plantuml raw">${code}</div>`
   }
   const result = {
     value: code
